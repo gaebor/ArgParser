@@ -60,11 +60,11 @@ public:
         {
             std::vector<wchar_t> buffer(MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, NULL,0 ));
             MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, buffer.data(), (int)buffer.size());
-            WriteConsoleW(stdOut, buffer.data(), buffer.size()-1, &numWritten, NULL);
+            WriteConsoleW(stdOut, buffer.data(), (DWORD)buffer.size()-1, &numWritten, NULL);
         }
         else
         {
-            WriteFile(stdOut, s.data(), s.size()-1, &numWritten, NULL);
+            WriteFile(stdOut, s.data(), (DWORD)s.size()-1, &numWritten, NULL);
         }
         return *this;
     }
@@ -98,14 +98,14 @@ int wmain(int argc, const wchar_t** argv)
         TEXT("A configurable application\n")
         TEXT("Author: Gabor Borbely, Contact: borbely@math.bme.hu\n")
         TEXT("Very long text will be sliced into 'width' long chunks. But a manual '\\n' will produce a new-line, too."),
-        std::vector<TCHAR*>({ TEXT("-h"), TEXT("--help") }) /*help options*/,
+        { TEXT("-h"), TEXT("--help") },
         wcout, wcerr,
         TEXT("ASCII\tabcde xyz\nGerman\täöü ÄÖÜ ß\n")
         TEXT("Hungarian\tőűíŐŰÍ\nPolish\tąęźżńłŁ\n")
         TEXT("Russian\tабвгдеж эюя\nCJK\t你好\nemoji\t😂"), 75);
 
-    parser.AddArg(filename, arg::wlist({ L"-f", L"--file" }), TEXT("an ASCII filename"));
-    parser.AddArg(wfilename, arg::wlist({ L"-w", L"--wide" }), TEXT("a Unicode filename"));
+    parser.AddArg(filename, { TEXT("-f"), TEXT("--file") }, TEXT("an ASCII filename"));
+    parser.AddArg(wfilename, { TEXT("-w"), TEXT("--wide") }, TEXT("a Unicode filename"));
 
     parser.Do(argc, argv);
 

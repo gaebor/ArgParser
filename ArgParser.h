@@ -436,7 +436,7 @@ namespace arg
         }
 
     public:
-        template<class ArgList>
+        template<class ArgList = std::initializer_list<String>>
         Parser(const String& header,
                 const ArgList& helps,
                 OStream& cout, OStream& cerr,
@@ -552,12 +552,11 @@ namespace arg
                 PrintWidth(os, footer, Chr('\n'), String(), width);
                 os << '\n';
             }
-            succeed();
         }
         
-        template <class Ty, class ArgList, class ...Vargs>
+        template <class Ty, class ArgList = std::initializer_list<String>, class ...Vargs>
         bool AddArg(Ty& value,
-            const ArgList& args,
+            const ArgList& args = ArgList(),
             const String& info = String(), const String& meta = String(),
             Vargs ...vargs)
         {
@@ -583,9 +582,9 @@ namespace arg
             }
         }
 
-        template<class ArgList>
+        template<class ArgList = std::initializer_list<String>>
         bool AddFlag(bool& value,
-            const ArgList& args,
+            const ArgList& args = ArgList(),
             const String& info = String(), bool reset=false, const String& meta = String())
         {
             if (args.size() == 0)

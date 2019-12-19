@@ -16,4 +16,29 @@
   * min-max bounds
   * choice from a predefined set
   * any bool-valued function can be provided
+* `strict` option
+  * if set, the parser calls `exit(1)` on any trouble
+  * if not set, then return value and error message tells you the problems, but the application continues.
+    * in case of any trouble, your initial variables won't be changed. No incomplete state in the options!
 
+## Examples
+Minimal arguments:
+```C++
+int main(int argc, const char** argv)
+{
+    double x;
+    std::string s;
+
+    arg::Parser<> parser("Header, some info",
+        { "-h", "--help" } /*help options*/,
+        std::cout, std::cerr  /*you have to specify the output streams! */
+    );
+    parser.AddArg(x);
+    parser.AddArg(s, { "-s", "--string" }, "relative path", "filename");
+
+    parser.Do(argc, argv);
+    
+    return 0;
+}
+```
+And you're done!
